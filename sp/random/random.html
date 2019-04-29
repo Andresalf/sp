@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+	    <style>
+	      body {
+	        background-color: lightblue;
+	      }
+	      #result {
+	          text-align: center;
+	          font-size: 30px;
+      		}
+
+	      #inputs {
+	        width:500px;
+	        margin: auto;
+	        border: 3px solid #73AD21;
+	      }
+
+	      .button {
+	        width:100%;
+	      }
+
+	      h2 {
+	          text-align: center;
+	      }
+	    </style>
+  	</head>
+	<body>
+		<div id="inputs">
+			<h2>Random number generator</h2>
+			<p>
+				<label>Please enter a number between 1 and 999999: </label>
+				<input id="number">
+			</p>
+			<button class="button" onclick="calculate()">Get random number</button>
+			<p>Result:</p>
+			<p id="result"></p>
+		</div>
+		<script>
+			const MAX_NUMBER = 1000000
+
+			function calculate() {
+ 	 			var input, result;
+  				input = document.getElementById("number").value;
+  				result = document.getElementById("result");
+
+  				try {
+  					// If it is Not a Number or less than one or greater than MAX_NUMBER-1
+  					if (isNaN(input) || input < 1 || input >= MAX_NUMBER) {
+    					throw "Invalid input!";
+  					}
+  					result.innerHTML = randomNumber(input);
+  				}
+  				catch(error) {
+  					result.innerHTML = error;
+  				}  				
+			}
+
+			function flip() {
+				return Math.random() >= 0.5;
+			}
+
+			function randomNumber(n) {
+				// The number of flips will be the bits needed to represent n.
+				var flips = Math.ceil(Math.log(n) / Math.log(2))
+				var number = 0;
+				
+				// Turn on/off bits based on flip result.
+				for (var i = 0; i < flips; i++) {
+					number = number << 1;
+					number = number | (flip() ? 1 : 0);
+				}
+
+				// Return the modulo so as to get a number in [0, n-1]
+				return number % n;
+			}
+		</script>
+	</body>
+</html>

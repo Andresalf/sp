@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: lightblue;
+      }
+
+      #timer_row {
+        width:500px;
+        margin: auto;
+      }
+
+      #inputs {
+        width:500px;
+        margin: auto;
+        border: 3px solid #73AD21;
+        margin-top: 15px;
+      }
+
+      .button {
+        width:45%;
+        margin-left: 10px;
+      }
+
+      .column {
+        float: left;
+        width: 25%;
+        padding: 0 10px;
+      }
+
+      .row {margin: 0 -5px;}
+
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .box {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        text-align: center;
+        background-color: #f1f1f1;
+        height: 25%;
+        border-radius: 5px;
+      }
+
+      .timer_label {
+        color: #7c795d; 
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 18px;
+        margin-top: 0px;
+      }
+
+      #message {
+        text-align: center;
+        font-size: 30px;
+      }
+
+      h2 {
+        font-size: 25px;
+        margin-bottom: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="timer_row">
+      <div class="row">
+        <div class="column">
+          <div class="box">
+            <h2 id="days">0</h2>
+            <p class="timer_label">Days</p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="box">
+            <h2 id="hours">0</h2>
+            <p class="timer_label">Hours</p>
+          </div>
+        </div>
+        
+        <div class="column">
+          <div class="box">
+            <h2 id="minutes">0</h2>
+            <p class="timer_label">Minutes</p>
+          </div>
+        </div>
+        
+        <div class="column">
+          <div class="box">
+            <h2 id="seconds">0</h2>
+            <p class="timer_label">Seconds</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="inputs">
+      <p>Please enter the time to count down from:</p>
+      <p>
+        <label>Days: </label>
+        <input id="days_in">
+      </p>
+      <p>
+        <label>Hours: </label>
+        <input id="hours_in">
+      </p>
+      <p>
+        <label>Minutes: </label>
+        <input id="minutes_in">
+      </p>
+      <p>
+        <label>Seconds: </label>
+        <input id="seconds_in">
+      </p>
+        <button class="button" onclick="startTimer()">Start</button>
+        <button class="button" onclick="clearTimer()">Clear</button>
+      <p id="message"></p>
+    </div>
+    <script>
+      var days, hours, minutes, seconds, timer;
+      
+      function startTimer() {
+        if (validateInputs())
+        {
+          displayTimerValues();
+          timer = setInterval(updateTimer, 1000);
+        }
+      }
+
+      function clearTimer() {
+        clearInterval(timer);
+        document.getElementById("days_in").value = '';
+        document.getElementById("hours_in").value = '';
+        document.getElementById("minutes_in").value = '';
+        document.getElementById("seconds_in").value = '';
+        days = 0;
+        hours = 0;
+        minutes = 0;
+        seconds = 0;
+        displayTimerValues();
+      }
+
+      function validateInputs() {
+        var message, hoursElem, minutesElem, secondsElem;
+        message = document.getElementById("message");
+        daysElem = document.getElementById("days_in");
+        hoursElem = document.getElementById("hours_in");
+        minutesElem = document.getElementById("minutes_in");
+        secondsElem = document.getElementById("seconds_in");
+        message.innerHTML = "";
+        
+        if (daysElem.value == "" || isNaN(daysElem.value) || daysElem.value < 0) {
+          message.innerHTML = "Please enter " + 0 + " or more days";
+          return false;
+        }
+
+        if (hoursElem.value == "" || isNaN(hoursElem.value) || hoursElem.value < 0 || hoursElem.value > 23) {
+          message.innerHTML = "Please enter a value between " + 0 + " and " + 23 + " hours";
+          return false;
+        }
+        else if (minutesElem.value == "" || isNaN(minutesElem.value) || minutesElem.value < 0 || minutesElem.value > 59) {
+          message.innerHTML = "Please enter a value between " + 0 + " and " + 59 + " minutes";
+          return false;
+        }
+        if (secondsElem.value == "" || isNaN(secondsElem.value) || secondsElem.value < 0 || secondsElem.value > 59) {
+          message.innerHTML = "Please enter a value between " + 0 + " and " + 59 + " seconds";
+          return false;
+        }
+
+        days = daysElem.value;
+        hours = hoursElem.value;
+        minutes = minutesElem.value;
+        seconds = secondsElem.value;
+        
+        return true;
+      }
+
+      function updateTimer() {
+        if (seconds == 0 && minutes == 0 && hours == 0 && days ==0)
+          document.getElementById("message").innerHTML = "Timer is done!";
+        else {
+          if(seconds == 0) {
+            seconds = 59;
+
+            if(minutes == 0) {
+              minutes = 59;
+
+              if(hours == 0) {
+                hours = 23;
+
+                days--;
+              }
+              else
+                hours--;
+            }
+            else
+              minutes--;
+          }
+          else
+            seconds--;
+
+          displayTimerValues();
+        }
+      }
+
+      function displayTimerValues(){
+        document.getElementById("days").innerHTML = days;
+        document.getElementById("hours").innerHTML = hours;
+        document.getElementById("minutes").innerHTML = minutes;
+        document.getElementById("seconds").innerHTML = seconds;
+      }
+    </script>
+  </body>
+</html>
